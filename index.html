@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 50px;
+            background-color: #f4f4f4;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            margin-right: 10px;
+        }
+        input[type="submit"] {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .result {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>URL Shortener</h1>
+
+    <form id="urlForm">
+        <label for="longUrl">Enter a long URL:</label><br><br>
+        <input type="text" id="longUrl" name="longUrl" placeholder="https://example.com" required>
+        <input type="submit" value="Shorten">
+    </form>
+
+    <div class="result" id="result"></div>
+
+    <script>
+        document.getElementById('urlForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const longUrl = document.getElementById('longUrl').value;
+            const response = await fetch('/shorten', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ long_url: longUrl })
+            });
+            const data = await response.json();
+            document.getElementById('result').innerHTML = `Shortened URL: <a href="${data.short_url}" target="_blank">${data.short_url}</a>`;
+        };
+    </script>
+
+</body>
+</html>
